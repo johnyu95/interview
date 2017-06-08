@@ -52,7 +52,6 @@ def get_task(task_id):
 @app.route('/tasks', methods=['POST'])
 def create_task():
     if not request.json or 'title' not in request.json:
-        print(request.form['title'])
         abort(400)
     task = Task(title=request.json['title'], description=request.json.get('description', ""), done=False)
     db.session.add(task)
