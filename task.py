@@ -1,9 +1,6 @@
 import os
-from flask import Flask, render_template, jsonify, redirect, url_for, abort, request
+from flask import Flask, render_template, jsonify, abort, request
 from flask_sqlalchemy import SQLAlchemy
-from wtforms import StringField, SubmitField
-from flask_wtf import Form
-from flask_bootstrap import Bootstrap
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -14,8 +11,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] =\
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
-
-bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
 
 
@@ -30,21 +25,9 @@ class Task(db.Model):
         return '<Task %r>' % self.title
 
 
-class TaskForm(Form):
-    title = StringField()
-    description = StringField()
-    submit = SubmitField('Submit')
-
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    form = TaskForm()
-    if form.validate_on_submit():
-        task = Task(title=form.title.data, description=form.description.data, done=False)
-        db.session.add(task)
-        db.session.commit()
-        return redirect(url_for('index'))
-    return render_template('index.html', form=form)
+    return render_template('index.html')
 
   
 @app.route('/tasks', methods=['GET'])
@@ -54,7 +37,8 @@ def all_tasks():
     for task in tasks:
         task_json = {'id': task.id, 'title': task.title, 'description': task.description, 'done': task.done}
         task_array.append(task_json)
-    return jsonify({'tasks': task_array})
+    # return jsonify({'tasks': task_array})
+    return jsonify(task_array)
 
 
 @app.route('/tasks/<int:task_id>', methods=['GET'])
@@ -66,12 +50,13 @@ def get_task(task_id):
     for task in tasks:
         task_json = {'id': task.id, 'title': task.title, 'description': task.description, 'done': task.done}
         task_array.append(task_json)
-    return jsonify({'task': task_array[0]})
+    return jsonify(task_array[0])
 
 
 @app.route('/tasks', methods=['POST'])
 def create_task():
     if not request.json or 'title' not in request.json:
+        print(request.form['title'])
         abort(400)
     task = Task(title=request.json['title'], description=request.json.get('description', ""), done=False)
     db.session.add(task)
@@ -95,7 +80,6 @@ def update_task(task_id):
     db.session.add(task)
     db.session.commit()
     return jsonify({'id': task.id})
-
 
 
 @app.route('/tasks/<int:task_id>', methods=['DELETE'])

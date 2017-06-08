@@ -1,20 +1,23 @@
-{% import "bootstrap/wtf.html" as wtf %}
-
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html>
+<head lang="en">
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Interview</title>
 </head>
 <body>
-    <h1>alskdjfhaslkdjfh</h1>
-{#    <form method="post">#}
-{#      Title:<br>#}
-{#      <input type="text" name="title"><br>#}
-{#      Description:<br>#}
-{#      <input type="text" name="description">#}
-{#        <input type="submit" value="Submit">#}
-{#    </form>#}
-    {{ wtf.quick_form(form) }}
+<div class="container">
+    <h1>To-do List</h1>
+    <div id="content"></div>
+</div>
+<!-- scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.1.0/react.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.1.0/react-dom.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous">
+</script>
+<script type="text/jsx" src="{{ url_for('static', filename='components.js') }}"></script>
 </body>
 </html>
