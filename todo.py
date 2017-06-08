@@ -37,20 +37,16 @@ def all_tasks():
     for task in tasks:
         task_json = {'id': task.id, 'title': task.title, 'description': task.description, 'done': task.done}
         task_array.append(task_json)
-    # return jsonify({'tasks': task_array})
     return jsonify(task_array)
 
 
 @app.route('/tasks/<int:task_id>', methods=['GET'])
 def get_task(task_id):
-    tasks = Task.query.filter_by(id=task_id).all()
-    if len(tasks) == 0:
+    task = Task.query.filter_by(id=task_id).first()
+    if task is None:
         abort(404)
-    task_array = []
-    for task in tasks:
-        task_json = {'id': task.id, 'title': task.title, 'description': task.description, 'done': task.done}
-        task_array.append(task_json)
-    return jsonify(task_array[0])
+    task_json = {'id': task.id, 'title': task.title, 'description': task.description, 'done': task.done}
+    return jsonify(task_json)
 
 
 @app.route('/tasks', methods=['POST'])
