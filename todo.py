@@ -32,6 +32,10 @@ def index():
   
 @app.route('/tasks', methods=['GET'])
 def all_tasks():
+    """
+    Returns a JSON with all tasks in the database
+    :return: JSON response
+    """
     tasks = Task.query.filter_by().all()
     task_array = []
     for task in tasks:
